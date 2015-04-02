@@ -18,3 +18,13 @@ def readNode():
 
 def setupNuke():
     nuke.addOnCreate(readNode, nodeClass='Read')
+    
+def getBackdrop():
+    node = nuke.selectedNode()
+    if node:
+        bds = nuke.allNodes('BackdropNode')
+        if bds:
+            for bd in bds:
+                if node in bd.getNodes():
+                    return bd
+nuke.getBackdrop = getBackdrop
