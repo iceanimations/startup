@@ -27,4 +27,24 @@ def getBackdrop():
             for bd in bds:
                 if node in bd.getNodes():
                     return bd
+                
+def activateBackdrop(node, select=True):
+    nodes = []
+    xmin = node.knob('xpos').value()
+    xmax = xmin + node.knob('bdwidth').value()
+    ymin = node.knob('ypos').value()
+    ymax = ymin + node.knob('bdheight').value()
+    node.knob('selected').setValue(True)
+    for i in [i for i in nuke.allNodes() if i is not node]:
+        ixmin = i.knob('xpos').value()
+        ixmax = ixmin + i.screenWidth()
+        iymin =  i.knob('ypos').value()
+        iymax = iymin + i.screenHeight()
+        if (ixmin >= xmin and ixmax < xmax) and (iymin >= ymin and iymax < ymax):
+            nodes.append(i)
+            if select:
+                i.knob('selected').setValue(True)
+    return nodes
+
 nuke.getBackdrop = getBackdrop
+nuke.activateBackdrop = activateBackdrop
