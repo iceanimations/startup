@@ -25,7 +25,7 @@ def getBackdrop():
         bds = nuke.allNodes('BackdropNode')
         if bds:
             for bd in bds:
-                if node in bd.getNodes():
+                if node in activateBackdrop(bd, False):
                     return bd
                 
 def activateBackdrop(node, select=True):
