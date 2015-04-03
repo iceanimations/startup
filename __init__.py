@@ -44,6 +44,8 @@ def activateBackdrop(node, select=True):
             nodes.append(i)
             if select:
                 i.knob('selected').setValue(True)
+            else:
+                node.setSelected(False)
     return nodes
 
 nuke.getBackdrop = getBackdrop
