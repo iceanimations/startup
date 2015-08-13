@@ -1,6 +1,11 @@
 import nuke
 import os.path as osp
 import subprocess
+from site import addsitedir as asd
+
+asd('R:/Python_Scripts/Nuke')
+import createArchive
+reload(createArchive)
 
 openLoc = '''
 import subprocess
@@ -14,10 +19,13 @@ def readNode():
     path = node.knob('file').getValue()
     if path:
         path = osp.dirname(path).replace('/', '\\\\')
-    node.addKnob(nuke.PyScript_Knob('openLoc', 'Open Location', openLoc%path))
+    knobName = 'openLoc'
+    if knobName not in nuke.Node.knobs(node):
+        node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc%path))
 
 def setupNuke():
     nuke.addOnCreate(readNode, nodeClass='Read')
+    createArchive.setupNuke()
     
 def getBackdrop():
     node = nuke.selectedNode()
