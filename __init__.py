@@ -24,8 +24,9 @@ def readNode():
         node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc%path))
 
 def setupNuke():
-    nuke.addOnCreate(readNode, nodeClass='Read')
-    createArchive.setupNuke()
+    pass
+    #nuke.addOnCreate(readNode, nodeClass='Read')
+    #createArchive.setupNuke()
     
 def getBackdrop():
     node = nuke.selectedNode()
