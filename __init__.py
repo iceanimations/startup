@@ -1,7 +1,7 @@
 import nuke
 import os.path as osp
-import subprocess
 from site import addsitedir as asd
+import functools
 
 asd('R:/Python_Scripts/Nuke')
 import createArchive
@@ -28,8 +28,9 @@ def setupNuke():
     nuke.addOnCreate(readNode, nodeClass='Read')
     #createArchive.setupNuke()
     
-def getBackdrop():
-    node = nuke.selectedNode()
+def getBackdrop(node=None):
+    if node is None:
+        node = nuke.selectedNode()
     if node:
         bds = nuke.allNodes('BackdropNode')
         if bds:
@@ -59,3 +60,4 @@ def activateBackdrop(node, select=True):
 
 nuke.getBackdrop = getBackdrop
 nuke.activateBackdrop = activateBackdrop
+nuke.getBackdropNodes = functools.partial(activateBackdrop, select=False)
