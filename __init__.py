@@ -9,23 +9,27 @@ reload(createArchive)
 
 openLoc = '''
 import subprocess
-command = 'explorer %s'
-print command
-subprocess.call(command)
+import os.path as osp
+import nuke
+subprocess.call('explorer '+ osp.normpath(osp.dirname(nuke.thisNode().knob('file').getValue())))
 '''
 
 def readNode():
     node = nuke.thisNode()
-    path = node.knob('file').getValue()
-    if path:
-        path = osp.dirname(path).replace('/', '\\\\')
     knobName = 'openLoc'
     if knobName not in nuke.Node.knobs(node):
-        node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc%path))
+        node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc))
+        
+def writeNode():
+    node = nuke.thisNode()
+    knobName = 'openLoc'
+    if knobName not in nuke.Node.knobs(node):
+        node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc))
 
 def setupNuke():
     #pass
     nuke.addOnCreate(readNode, nodeClass='Read')
+    nuke.addOnCreate(writeNode, nodeClass='Write')
     #createArchive.setupNuke()
     
 def getBackdrop(node=None):
