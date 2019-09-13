@@ -1,17 +1,17 @@
 import nuke
-import os.path as osp
 from site import addsitedir as asd
 import functools
+import addWrite
 
 asd('R:/Python_Scripts/Nuke')
-import createArchive
-reload(createArchive)
 
 openLoc = '''
 import subprocess
 import os.path as osp
 import nuke
-subprocess.call('explorer '+ osp.normpath(osp.dirname(nuke.thisNode().knob('file').getValue())))
+subprocess.call(
+    'explorer '+
+    osp.normpath(osp.dirname(nuke.thisNode().knob('file').getValue())))
 '''
 
 def readNode():
@@ -19,19 +19,26 @@ def readNode():
     knobName = 'openLoc'
     if knobName not in nuke.Node.knobs(node):
         node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc))
-        
+
+
 def writeNode():
     node = nuke.thisNode()
     knobName = 'openLoc'
     if knobName not in nuke.Node.knobs(node):
         node.addKnob(nuke.PyScript_Knob(knobName, 'Open Location', openLoc))
 
+
+def archiveOutput():
+    node = nuke.thisNode()
+    addWrite.addArchiveKnobs(node)
+
+
 def setupNuke():
-    #pass
     nuke.addOnCreate(readNode, nodeClass='Read')
     nuke.addOnCreate(writeNode, nodeClass='Write')
-    #createArchive.setupNuke()
-    
+    nuke.addOnCreate(archiveOutput, nodeClass='Write')
+
+
 def getBackdrop(node=None):
     if node is None:
         node = nuke.selectedNode()
@@ -41,7 +48,8 @@ def getBackdrop(node=None):
             for bd in bds:
                 if node in activateBackdrop(bd, False):
                     return bd
-                
+
+
 def activateBackdrop(node, select=True):
     nodes = []
     xmin = node.knob('xpos').value()
@@ -61,6 +69,7 @@ def activateBackdrop(node, select=True):
             else:
                 node.setSelected(False)
     return nodes
+
 
 nuke.getBackdrop = getBackdrop
 nuke.activateBackdrop = activateBackdrop
