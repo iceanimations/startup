@@ -1,9 +1,8 @@
-import nuke
-from site import addsitedir as asd
 import functools
+import nuke
+
 import addWrite
 
-asd('R:/Python_Scripts/Nuke')
 
 openLoc = '''
 import subprocess
@@ -13,6 +12,7 @@ subprocess.call(
     'explorer '+
     osp.normpath(osp.dirname(nuke.thisNode().knob('file').getValue())))
 '''
+
 
 def readNode():
     node = nuke.thisNode()
@@ -60,9 +60,10 @@ def activateBackdrop(node, select=True):
     for i in [i for i in nuke.allNodes() if i is not node]:
         ixmin = i.knob('xpos').value()
         ixmax = ixmin + i.screenWidth()
-        iymin =  i.knob('ypos').value()
+        iymin = i.knob('ypos').value()
         iymax = iymin + i.screenHeight()
-        if (ixmin >= xmin and ixmax < xmax) and (iymin >= ymin and iymax < ymax):
+        if ((ixmin >= xmin and ixmax < xmax) and
+                (iymin >= ymin and iymax < ymax)):
             nodes.append(i)
             if select:
                 i.knob('selected').setValue(True)
